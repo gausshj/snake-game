@@ -22,6 +22,28 @@ npm run dev
 5. Push a matching tag like `v1.0.0`.
 6. GitHub Actions will build `.dmg`, `.pkg`, `.exe`, `.AppImage`, and `.deb`, then publish a GitHub Release.
 
+## Signed Releases
+
+Tag releases now enforce platform signing for macOS and Windows:
+
+- macOS releases require a `Developer ID Application` certificate, a `Developer ID Installer` certificate, and an App Store Connect API key for notarization.
+- Windows releases require a code-signing `.pfx` certificate.
+- Linux artifacts are still built unsigned because there is no single Gatekeeper or SmartScreen equivalent for the current `.AppImage` and `.deb` flow.
+
+Add these GitHub Actions secrets before cutting a release:
+
+- `APPLE_SIGNING_CERT_B64`: base64-encoded `Developer ID Application` `.p12`
+- `APPLE_SIGNING_CERT_PASSWORD`
+- `APPLE_INSTALLER_CERT_B64`: base64-encoded `Developer ID Installer` `.p12`
+- `APPLE_INSTALLER_CERT_PASSWORD`
+- `APPLE_API_KEY_B64`: base64-encoded App Store Connect API key `.p8`
+- `APPLE_API_KEY_ID`
+- `APPLE_API_ISSUER`
+- `WINDOWS_SIGNING_CERT_B64`: base64-encoded Windows signing `.pfx`
+- `WINDOWS_SIGNING_CERT_PASSWORD`
+
+Once these are configured, release tags will fail fast instead of publishing unsigned macOS or Windows artifacts.
+
 ## Local Checks
 
 ```bash
