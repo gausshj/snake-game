@@ -19,12 +19,15 @@ jobs:
         include:
           - os: macos-latest
             label: macOS
-            script: pack:mac
+            release_signing_target: mac
+            script: pack:mac:release
           - os: windows-latest
             label: Windows
-            script: pack:win
+            release_signing_target: win
+            script: pack:win:release
           - os: ubuntu-latest
             label: Linux
+            release_signing_target: linux
             script: pack:linux
     defaults:
       run:
@@ -48,6 +51,34 @@ jobs:
         env:
           RELEASE_TAG_NAME: ${{ github.ref_name }}
         run: node ./scripts/validate-release-version.cjs
+
+      - name: Validate signing secrets
+        env:
+          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+          APPLE_API_KEY_B64: ${{ secrets.APPLE_API_KEY_B64 }}
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_INSTALLER_CERT_B64: ${{ secrets.APPLE_INSTALLER_CERT_B64 }}
+          APPLE_INSTALLER_CERT_PASSWORD: ${{ secrets.APPLE_INSTALLER_CERT_PASSWORD }}
+          APPLE_SIGNING_CERT_B64: ${{ secrets.APPLE_SIGNING_CERT_B64 }}
+          APPLE_SIGNING_CERT_PASSWORD: ${{ secrets.APPLE_SIGNING_CERT_PASSWORD }}
+          RELEASE_SIGNING_TARGET: ${{ matrix.release_signing_target }}
+          WINDOWS_SIGNING_CERT_B64: ${{ secrets.WINDOWS_SIGNING_CERT_B64 }}
+          WINDOWS_SIGNING_CERT_PASSWORD: ${{ secrets.WINDOWS_SIGNING_CERT_PASSWORD }}
+        run: node ./scripts/validate-release-signing.cjs
+
+      - name: Prepare signing assets
+        env:
+          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+          APPLE_API_KEY_B64: ${{ secrets.APPLE_API_KEY_B64 }}
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_INSTALLER_CERT_B64: ${{ secrets.APPLE_INSTALLER_CERT_B64 }}
+          APPLE_INSTALLER_CERT_PASSWORD: ${{ secrets.APPLE_INSTALLER_CERT_PASSWORD }}
+          APPLE_SIGNING_CERT_B64: ${{ secrets.APPLE_SIGNING_CERT_B64 }}
+          APPLE_SIGNING_CERT_PASSWORD: ${{ secrets.APPLE_SIGNING_CERT_PASSWORD }}
+          RELEASE_SIGNING_TARGET: ${{ matrix.release_signing_target }}
+          WINDOWS_SIGNING_CERT_B64: ${{ secrets.WINDOWS_SIGNING_CERT_B64 }}
+          WINDOWS_SIGNING_CERT_PASSWORD: ${{ secrets.WINDOWS_SIGNING_CERT_PASSWORD }}
+        run: node ./scripts/prepare-signing-assets.cjs
 
       - name: Install dependencies
         run: npm ci

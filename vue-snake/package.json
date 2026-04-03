@@ -20,7 +20,9 @@
     "dev": "npm run build:ts && electron .",
     "pack:linux": "npm run build:ts && electron-builder --linux AppImage deb --x64 --publish never",
     "pack:mac": "npm run build:ts && electron-builder --mac dmg pkg --publish never",
+    "pack:mac:release": "npm run build:ts && electron-builder --mac dmg pkg --publish never -c.mac.forceCodeSigning=true",
     "pack:win": "npm run build:ts && electron-builder --win nsis --x64 --publish never",
+    "pack:win:release": "npm run build:ts && electron-builder --win nsis --x64 --publish never -c.win.forceCodeSigning=true",
     "start": "npm run build:ts && electron .",
     "test": "npm run build:ts && node --test",
     "test:coverage": "npm run build:ts:coverage && node --enable-source-maps --test --experimental-test-coverage --test-reporter=spec --test-reporter=lcov --test-reporter-destination=stdout --test-reporter-destination=lcov.info",
@@ -32,6 +34,7 @@
     "appId": "com.gauss.vuesnake",
     "asar": true,
     "directories": {
+      "buildResources": "build",
       "output": "dist"
     },
     "electronVersion": "37.2.0",
@@ -65,6 +68,9 @@
     "mac": {
       "artifactName": "${productName}-${version}-mac-${arch}.${ext}",
       "category": "public.app-category.games",
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.inherit.plist",
+      "hardenedRuntime": true,
       "target": [
         "dmg",
         "pkg"
