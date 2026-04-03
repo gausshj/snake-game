@@ -3,9 +3,9 @@
     "name": "gauss",
     "email": "kylin_0@qq.com"
   },
-  "description": "Classic Snake built with Vue and Electron",
+  "description": "Classic Snake Game built with Vue and Electron",
   "homepage": "https://github.com/gausshj/snake-game",
-  "name": "vue-snake",
+  "name": "snake-game",
   "main": "electron/main.cjs",
   "private": true,
   "repository": {
@@ -31,7 +31,7 @@
     "build:ts:coverage": "tsc -p tsconfig.json --sourceMap true --inlineSources true"
   },
   "build": {
-    "appId": "com.gauss.vuesnake",
+    "appId": "com.gauss.snakegame",
     "asar": true,
     "directories": {
       "buildResources": "build",
@@ -81,7 +81,7 @@
       "oneClick": false,
       "perMachine": false
     },
-    "productName": "Vue Snake",
+    "productName": "Snake Game",
     "win": {
       "artifactName": "${productName}-${version}-win-${arch}.${ext}",
       "target": [
