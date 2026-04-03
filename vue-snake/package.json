@@ -13,7 +13,7 @@
     "url": "https://github.com/gausshj/snake-game.git"
   },
   "type": "module",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "scripts": {
     "browser": "npm run build:ts && node server.mjs",
     "build:ts": "tsc -p tsconfig.json",
