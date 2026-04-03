@@ -21,6 +21,7 @@ npm run dev
 4. Merge the PR to `main`.
 5. Push a matching tag like `v1.0.0`.
 6. GitHub Actions will build `.dmg`, `.pkg`, `.exe`, `.AppImage`, and `.deb`, then publish a GitHub Release.
+7. Each GitHub Release now starts with an `Introduction` section before the generated release notes.
 
 ## Signed Releases
 

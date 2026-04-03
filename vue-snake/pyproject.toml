@@ -1,7 +1,7 @@
 [project]
-name = "vue-snake"
+name = "snake-game"
 version = "0.1.0"
-description = "Vue Snake local AI training environment"
+description = "Snake Game local AI training environment"
 requires-python = ">=3.13,<3.14"
 dependencies = [
   "numpy>=2.3,<3",

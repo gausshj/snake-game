@@ -521,7 +521,7 @@ export default defineComponent({
       <section class="game-card">
         <header class="topbar">
           <div>
-            <p class="eyebrow">Vue Snake</p>
+            <p class="eyebrow">Snake Game</p>
             <h1>经典贪吃蛇</h1>
           </div>
           <div class="status-group">

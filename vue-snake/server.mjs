@@ -35,5 +35,5 @@ createServer((request, response) => {
   response.writeHead(200, { "Content-Type": contentType });
   createReadStream(filePath).pipe(response);
 }).listen(port, host, () => {
-  console.log(`Vue Snake dev server running at http://${host}:${port}`);
+  console.log(`Snake Game dev server running at http://${host}:${port}`);
 });

@@ -92,7 +92,7 @@ jobs:
       - name: Upload release artifacts
         uses: actions/upload-artifact@v6
         with:
-          name: vue-snake-release-${{ runner.os }}
+          name: snake-game-release-${{ runner.os }}
           path: |
             vue-snake/dist/*.dmg
             vue-snake/dist/*.pkg
@@ -112,14 +112,21 @@ jobs:
       - name: Download release artifacts
         uses: actions/download-artifact@v6
         with:
-          pattern: vue-snake-release-*
+          pattern: snake-game-release-*
           path: release-artifacts
           merge-multiple: true
 
       - name: Create or update release
         uses: softprops/action-gh-release@v2
         with:
-          name: Vue Snake ${{ github.ref_name }}
+          name: Snake Game ${{ github.ref_name }}
+          body: |
+            ## Introduction
+
+            Snake Game is a classic Snake desktop app built with Vue, Electron, and local AI modes.
+
+            This release contains the latest packaged builds for macOS, Windows, and Linux.
+          generate_release_notes: true
           files: |
             release-artifacts/*.dmg
             release-artifacts/*.pkg
