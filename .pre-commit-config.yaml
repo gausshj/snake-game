@@ -1,0 +1,33 @@
+minimum_pre_commit_version: "3.7.0"
+default_install_hook_types:
+  - pre-commit
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-json
+      - id: check-yaml
+        files: ^\.github/workflows/.*\.yml$
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+  - repo: local
+    hooks:
+      - id: vue-tests
+        name: Vue tests with coverage
+        entry: npm
+        args:
+          - --prefix
+          - vue-snake
+          - run
+          - test:coverage
+        language: system
+        pass_filenames: false
+      - id: cpp-tests
+        name: C++ tests
+        entry: make
+        args:
+          - -C
+          - cpp
+          - test
+        language: system
+        pass_filenames: false
