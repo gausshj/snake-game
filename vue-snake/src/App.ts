@@ -12,6 +12,7 @@ import {
   resolveMapPreset,
   resolveThemePreset
 } from "./appConfig.js";
+import { boardLayoutForViewport } from "./layout.js";
 import { computeAIDirection, explainAIMove } from "./game/ai.js";
 import {
   computeDistilledExpertDirection,
@@ -80,14 +81,6 @@ function createBoard(state: GameState, activeConfig: GameConfig): BoardCell[] {
   return cells;
 }
 
-function boardSizeForConfig(config: GameConfig): number {
-  const longestEdge = Math.max(config.rows, config.cols);
-  const cellSize = 25;
-  const gap = 3;
-  const padding = 16;
-  return longestEdge * cellSize + Math.max(0, longestEdge - 1) * gap + padding;
-}
-
 export default defineComponent({
   name: "SnakeApp",
   setup() {
@@ -102,6 +95,10 @@ export default defineComponent({
     const settingsPausedGame = ref(false);
     const configPath = ref("");
     const configStatus = ref("使用内置默认配置。");
+    const viewport = ref({
+      height: appConfig.value.window.height,
+      width: appConfig.value.window.width
+    });
     const speedMultiplier = ref(appConfig.value.controls.speedMultiplier);
     const mapOptions = computed(() => appConfig.value.maps);
     const speedOptions = SPEED_OPTIONS;
@@ -135,10 +132,12 @@ export default defineComponent({
       return "点击开始，或按方向键 / WASD 后再开始移动。长按方向键可加速。空格或 P 暂停，R 重开，逗号键打开设置。";
     });
     const boardCells = computed(() => createBoard(state.value, gameConfig.value));
+    const boardLayout = computed(() => boardLayoutForViewport(gameConfig.value, viewport.value));
     const boardStyle = computed(() => ({
+      gap: `${boardLayout.value.gap}px`,
       gridTemplateColumns: `repeat(${gameConfig.value.cols}, 1fr)`,
       maxWidth: "100%",
-      width: `${boardSizeForConfig(gameConfig.value)}px`
+      width: `${boardLayout.value.boardSize}px`
     }));
 
     let tickHandle: number | null = null;
@@ -262,6 +261,13 @@ export default defineComponent({
         }
         boostArmTimer = null;
       }, appConfig.value.controls.boostHoldMs);
+    }
+
+    function syncViewport(): void {
+      viewport.value = {
+        height: window.innerHeight,
+        width: window.innerWidth
+      };
     }
 
     function clearBoostInputs(): void {
@@ -468,9 +474,11 @@ export default defineComponent({
     });
 
     onMounted(() => {
+      syncViewport();
       startLoop();
       window.addEventListener("keydown", handleKeydown);
       window.addEventListener("keyup", handleKeyup);
+      window.addEventListener("resize", syncViewport);
       window.addEventListener("blur", clearBoostInputs);
       void syncDesktopConfig(false);
     });
@@ -480,6 +488,7 @@ export default defineComponent({
       clearBoostInputs();
       window.removeEventListener("keydown", handleKeydown);
       window.removeEventListener("keyup", handleKeyup);
+      window.removeEventListener("resize", syncViewport);
       window.removeEventListener("blur", clearBoostInputs);
     });
 
