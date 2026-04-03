@@ -1,8 +1,9 @@
 const packageVersion = require("../package.json").version;
-const tagVersion = (process.env.GITHUB_REF_NAME || "").replace(/^v/, "");
+const rawRefName = process.env.RELEASE_TAG_NAME || process.env.GITHUB_REF_NAME || "";
+const tagVersion = rawRefName.trim().replace(/^v/, "");
 
 if (!tagVersion) {
-  console.error("GITHUB_REF_NAME is required to validate the release version.");
+  console.error("RELEASE_TAG_NAME or GITHUB_REF_NAME is required to validate the release version.");
   process.exit(1);
 }
 
