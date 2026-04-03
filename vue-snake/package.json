@@ -1,0 +1,99 @@
+{
+  "author": {
+    "name": "gauss",
+    "email": "kylin_0@qq.com"
+  },
+  "description": "Classic Snake built with Vue and Electron",
+  "homepage": "https://github.com/gausshj/snake-game",
+  "name": "vue-snake",
+  "main": "electron/main.cjs",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gausshj/snake-game.git"
+  },
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "browser": "npm run build:ts && node server.mjs",
+    "build:ts": "tsc -p tsconfig.json",
+    "dev": "npm run build:ts && electron .",
+    "pack:linux": "npm run build:ts && electron-builder --linux AppImage deb --x64 --publish never",
+    "pack:mac": "npm run build:ts && electron-builder --mac dmg pkg --publish never",
+    "pack:win": "npm run build:ts && electron-builder --win nsis --x64 --publish never",
+    "start": "npm run build:ts && electron .",
+    "test": "npm run build:ts && node --test",
+    "test:coverage": "npm run build:ts:coverage && node --enable-source-maps --test --experimental-test-coverage --test-reporter=spec --test-reporter=lcov --test-reporter-destination=stdout --test-reporter-destination=lcov.info",
+    "train:distilled": "uv run python python-rl/train_distilled_expert.py && npm run build:ts",
+    "train:q-learning": "uv run python python-rl/train_q_learning.py && npm run build:ts",
+    "build:ts:coverage": "tsc -p tsconfig.json --sourceMap true --inlineSources true"
+  },
+  "build": {
+    "appId": "com.gauss.vuesnake",
+    "asar": true,
+    "directories": {
+      "output": "dist"
+    },
+    "electronVersion": "37.2.0",
+    "files": [
+      "electron/**/*",
+      "renderer/**/*",
+      "src/**/*",
+      "index.html",
+      "package.json",
+      "node_modules/vue/**/*"
+    ],
+    "linux": {
+      "artifactName": "${productName}-${version}-linux-${arch}.${ext}",
+      "category": "Game",
+      "maintainer": "gauss <kylin_0@qq.com>",
+      "target": [
+        {
+          "arch": [
+            "x64"
+          ],
+          "target": "AppImage"
+        },
+        {
+          "arch": [
+            "x64"
+          ],
+          "target": "deb"
+        }
+      ]
+    },
+    "mac": {
+      "artifactName": "${productName}-${version}-mac-${arch}.${ext}",
+      "category": "public.app-category.games",
+      "target": [
+        "dmg",
+        "pkg"
+      ]
+    },
+    "nsis": {
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false,
+      "perMachine": false
+    },
+    "productName": "Vue Snake",
+    "win": {
+      "artifactName": "${productName}-${version}-win-${arch}.${ext}",
+      "target": [
+        {
+          "arch": [
+            "x64"
+          ],
+          "target": "nsis"
+        }
+      ]
+    }
+  },
+  "devDependencies": {
+    "electron": "37.2.0",
+    "electron-builder": "^26.8.1",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "vue": "^3.5.32"
+  }
+}

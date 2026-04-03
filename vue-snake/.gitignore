@@ -1,0 +1,9 @@
+node_modules/
+dist/
+renderer/
+.DS_Store
+.venv/
+python-rl/__pycache__/
+snake.config.json
+
+lcov.info
