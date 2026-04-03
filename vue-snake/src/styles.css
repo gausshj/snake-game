@@ -12,6 +12,7 @@
 body {
   margin: 0;
   min-height: 100vh;
+  min-height: 100dvh;
   color: var(--text-main, #1c1c1c);
   background: var(--page-start, #f2efe8);
 }
@@ -22,7 +23,8 @@ button {
 
 .app-shell {
   min-height: 100vh;
-  padding: 10px 12px 12px;
+  min-height: 100dvh;
+  padding: 10px 12px 10px;
   background:
     radial-gradient(circle at top, var(--spot-color, rgba(120, 134, 107, 0.18)), transparent 36%),
     linear-gradient(180deg, var(--page-start, #f5f2ec) 0%, var(--page-end, #ece7dc) 100%);
