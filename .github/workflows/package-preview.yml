@@ -45,11 +45,11 @@ jobs:
       - name: Read package version
         id: package-version
         run: |
-          node -e "const fs = require('node:fs'); const version = require('./package.json').version; fs.appendFileSync(process.env.GITHUB_OUTPUT, 'value=' + version + '\\n');"
+          node -e "const fs = require('node:fs'); const version = require('./package.json').version; fs.appendFileSync(process.env.GITHUB_OUTPUT, 'value=' + version + '\n');"
 
       - name: Validate release version check
         env:
-          GITHUB_REF_NAME: v${{ steps.package-version.outputs.value }}
+          RELEASE_TAG_NAME: v${{ steps.package-version.outputs.value }}
         run: node ./scripts/validate-release-version.cjs
 
       - name: Install dependencies
