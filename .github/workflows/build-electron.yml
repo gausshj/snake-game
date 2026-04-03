@@ -46,12 +46,7 @@ jobs:
       - name: Validate release tag matches package version
         if: startsWith(github.ref, 'refs/tags/v')
         run: |
-          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
-          TAG_VERSION="${GITHUB_REF_NAME#v}"
-          if [ "$PACKAGE_VERSION" != "$TAG_VERSION" ]; then
-            echo "Tag v$TAG_VERSION does not match package.json version $PACKAGE_VERSION"
-            exit 1
-          fi
+          node -e "const packageVersion = require('./package.json').version; const tagVersion = (process.env.GITHUB_REF_NAME || '').replace(/^v/, ''); if (packageVersion !== tagVersion) { console.error('Tag v' + tagVersion + ' does not match package.json version ' + packageVersion); process.exit(1); }"
 
       - name: Install dependencies
         run: npm ci
